@@ -1,0 +1,45 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+
+
+model Zoo {
+  id           Int      @id @default(autoincrement())
+  name         String
+  city         String
+  operatingHours String
+  animals      Animal[]
+}
+
+model Animal {
+  id       Int      @id @default(autoincrement())
+  name     String
+  species  Species
+  gender   Gender
+  legs     Int
+  zooId    Int
+  zoo      Zoo      @relation(fields: [zooId], references: [id])
+  height   Float?   // For Giraffe
+  teeth    Int?     // For Crocodile
+  age      Int?     // For Giant Tortoise
+
+}
+
+enum Species {
+  GIRAFFE
+  CROCODILE
+  GIANT_TORTOISE
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
