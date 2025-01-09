@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { AnimalSchema } from "@/schemas";
+import { apiRequest } from "@/services/api";
 
 export default function AddAnimal({ params }: { params: Promise<{ id: string }> }) {
 	const { id } = React.use(params);
@@ -28,28 +29,19 @@ export default function AddAnimal({ params }: { params: Promise<{ id: string }> 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
-			console.log(formData);
 			AnimalSchema.parse(formData);
-			console.log("AFTER PARSE");
-			const response = await fetch("/api/animal", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					...formData,
-					zooId: parseInt(id),
-				}),
+
+			apiRequest("/api/animal", "POST", {
+				...formData,
+				zooId: parseInt(id),
 			});
-			if (response.ok) {
-				toast({
-					title: "Animal added successfully",
-					description: "The new animal has been added to the zoo.",
-				});
-				router.push(`/zoos/${id}`);
-			} else {
-				throw new Error("Failed to add animal");
-			}
+
+			toast({
+				title: "Animal added successfully",
+				description: "The new animal has been added to the zoo.",
+			});
+
+			router.push(`/zoos/${id}`);
 		} catch (error) {
 			if (error instanceof z.ZodError) {
 				toast({

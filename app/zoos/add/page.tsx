@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { ZooSchema } from "@/schemas";
+import { apiRequest } from "@/services/api";
 
 export default function AddZoo() {
 	const [formData, setFormData] = useState({
@@ -21,22 +22,15 @@ export default function AddZoo() {
 		e.preventDefault();
 		try {
 			ZooSchema.parse(formData);
-			const response = await fetch("/api/zoo", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(formData),
+
+			apiRequest("/api/zoo", "POST", formData);
+
+			toast({
+				title: "Zoo added successfully",
+				description: "The new zoo has been added to the database.",
 			});
-			if (response.ok) {
-				toast({
-					title: "Zoo added successfully",
-					description: "The new zoo has been added to the database.",
-				});
-				router.push("/zoos");
-			} else {
-				throw new Error("Failed to add zoo");
-			}
+
+			router.push("/zoos");
 		} catch (error) {
 			if (error instanceof z.ZodError) {
 				toast({

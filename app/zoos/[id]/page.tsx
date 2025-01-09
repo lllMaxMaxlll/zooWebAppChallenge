@@ -9,9 +9,17 @@ import DeleteZooButton from "@/components/DeleteZooButton";
 export default async function ZooDetails({ params }: { params: { id: string } }) {
 	const { id } = await params;
 
+	if (!id) {
+		return <p className="text-xl font-bold">Invalid Zoo ID</p>;
+	}
+
 	const zoo: Zoo = await db.zoo.findUnique({
 		where: { id: parseInt(id) },
 	});
+
+	if (!zoo) {
+		return <p className="text-xl font-bold">Zoo not found</p>;
+	}
 
 	const animals: Animal[] = await db.animal.findMany({
 		where: { zooId: zoo.id },

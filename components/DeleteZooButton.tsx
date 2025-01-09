@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import { apiRequest } from "@/services/api";
 import { useRouter } from "next/navigation";
 
 export default function DeleteZooButton({ id }: { id: string }) {
@@ -9,18 +10,13 @@ export default function DeleteZooButton({ id }: { id: string }) {
 
 	const handleRemove = async (id: string) => {
 		try {
-			const response = await fetch(`/api/zoo/${id}`, {
-				method: "DELETE",
+			apiRequest(`/api/zoo/${id}`, "DELETE");
+
+			toast({
+				title: "Zoo removed successfully",
+				description: "The zoo has been removed.",
 			});
-			if (response.ok) {
-				toast({
-					title: "Zoo removed successfully",
-					description: "The zoo has been removed.",
-				});
-				router.push("/zoos");
-			} else {
-				throw new Error("Failed to remove zoo");
-			}
+			router.push("/zoos");
 		} catch {
 			toast({
 				title: "Error",

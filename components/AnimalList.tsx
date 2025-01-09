@@ -43,7 +43,7 @@ export default function AnimalList({ animals }: { animals: Animal[]; zooId: numb
 					<p>Number of Legs: {animal.legs}</p>
 					{animal.species === "GIRAFFE" && <p>Height: {animal.height} cm</p>}
 					{animal.species === "CROCODILE" && <p>Teeth: {animal.teeth}</p>}
-					{animal.species === "GIRAFFE" && <p>Age: {animal.age}</p>}
+					{animal.species === "GIANT_TORTOISE" && <p>Age: {animal.age}</p>}
 					<div className="mt-2 space-x-2">
 						<Button onClick={() => setSelectedAnimal(animal)}>View Details</Button>
 						<Button variant="destructive" onClick={() => handleRemove(animal.id.toString())}>
